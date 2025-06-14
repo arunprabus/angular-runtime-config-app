@@ -1,32 +1,35 @@
-# ------------------------------
+# -----------------------
 # 1) Build Stage
-# ------------------------------
+# -----------------------
 FROM node:20-slim AS builder
 WORKDIR /app
 
-# install dependencies
+# Install dependencies
 COPY package*.json ./
 RUN npm ci
 
-# build the Angular app
+# Copy source & build Angular
 COPY . .
-RUN npm run build -- --configuration production --output-path=dist/
+RUN npm run build -- --configuration production
 
-# ------------------------------
-# 2) Run Stage
-# ------------------------------
+# -----------------------
+# 2) Runtime Stage
+# -----------------------
 FROM nginx:alpine
 
-# 2a) custom site config
+# Drop in custom NGINX config
 COPY default.conf /etc/nginx/conf.d/default.conf
 
-# 2b) copy built Angular app (flat dist/)
+# Copy the Angular build output
 COPY --from=builder /app/dist/ /usr/share/nginx/html/
 
-# 2c) copy runtime template & entrypoint
+# Ensure assets folder exists before templating
+RUN mkdir -p /usr/share/nginx/html/assets
+
+# Copy the config template and entrypoint
 COPY runtime-config.json.template /usr/share/nginx/html/assets/
 COPY entrypoint.sh /entrypoint.sh
-
 RUN chmod +x /entrypoint.sh
+
 EXPOSE 80
 ENTRYPOINT ["/entrypoint.sh"]
