@@ -1,40 +1,32 @@
-# Stage 1: Build the Angular application
+# ------------------------------
+# 1) Build Stage
+# ------------------------------
 FROM node:20-slim AS builder
-
 WORKDIR /app
 
-# Copy package files
+# install dependencies
 COPY package*.json ./
-
-# Install dependencies
 RUN npm ci
 
-# Copy source code
+# build the Angular app
 COPY . .
+RUN npm run build -- --configuration production --output-path=dist/
 
-# Build the application
-RUN npm run ng build -- --configuration production --output-path=dist/
-
-# Stage 2: Serve with nginx
+# ------------------------------
+# 2) Run Stage
+# ------------------------------
 FROM nginx:alpine
 
-# Remove default nginx website
-RUN rm -rf /usr/share/nginx/html/*
+# 2a) custom site config
+COPY default.conf /etc/nginx/conf.d/default.conf
 
-# Copy built application from builder stage
+# 2b) copy built Angular app (flat dist/)
 COPY --from=builder /app/dist/ /usr/share/nginx/html/
 
-# Copy entrypoint script
+# 2c) copy runtime template & entrypoint
+COPY runtime-config.json.template /usr/share/nginx/html/assets/
 COPY entrypoint.sh /entrypoint.sh
 
-# Make entrypoint script executable
 RUN chmod +x /entrypoint.sh
-
-# Expose port 80
 EXPOSE 80
-
-# Set entrypoint
 ENTRYPOINT ["/entrypoint.sh"]
-
-# Default command (will be executed by entrypoint)
-CMD ["nginx", "-g", "daemon off;"]

@@ -1,15 +1,10 @@
 #!/bin/sh
+# ensure assets dir exists
+mkdir -p /usr/share/nginx/html/assets
 
-# Create runtime configuration from environment variables
-cat <<EOF > /usr/share/nginx/html/assets/runtime-config.json
-{
-  "apiUrl": "${API_URL:-http://localhost:3000}",
-  "appName": "${APP_NAME:-Angular Runtime Config App}"
-}
-EOF
+# generate the runtime config from env vars
+envsubst < /usr/share/nginx/html/assets/runtime-config.json.template \
+        > /usr/share/nginx/html/assets/runtime-config.json
 
-echo "Runtime configuration created:"
-cat /usr/share/nginx/html/assets/runtime-config.json
-
-# Execute the passed command (nginx)
-exec "$@"
+# launch nginx in foreground
+exec nginx -g 'daemon off;'
