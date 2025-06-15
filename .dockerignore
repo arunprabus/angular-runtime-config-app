@@ -1,6 +1,8 @@
 node_modules
 npm-debug.log
-dist
+Dockerfile*
+docker-compose*
+.dockerignore
 .git
 .gitignore
 README.md
@@ -8,4 +10,7 @@ README.md
 .nyc_output
 coverage
 .nyc_output
+.coverage
 .vscode
+.idea
+*.log
