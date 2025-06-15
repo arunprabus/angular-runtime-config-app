@@ -10,7 +10,7 @@ RUN npm ci
 
 # Copy source & build Angular
 COPY . .
-RUN npm run build -- --configuration production
+RUN npm run build -- --configuration production --output-path=dist/browser
 
 # -----------------------
 # 2) Runtime Stage
@@ -21,7 +21,7 @@ FROM nginx:alpine
 COPY default.conf /etc/nginx/conf.d/default.conf
 
 # Copy the Angular build output
-COPY --from=builder /app/dist/ /usr/share/nginx/html/
+COPY --from=builder /app/dist/browser/ /usr/share/nginx/html/
 
 # Ensure assets folder exists before templating
 RUN mkdir -p /usr/share/nginx/html/assets
