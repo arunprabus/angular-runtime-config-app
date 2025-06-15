@@ -56,12 +56,12 @@ npm run preview
 
 ### Build the Docker Image
 ```bash
-docker build -t react-runtime-config-app .
+docker build -t angular-runtime-config-app .
 ```
 
 ### Run with Default Configuration
 ```bash
-docker run -p 8080:80 react-runtime-config-app
+docker run -p 8080:80 angular-runtime-config-app
 ```
 
 ### Run with Custom Environment Variables
@@ -70,7 +70,7 @@ docker run -p 8080:80 \
   -e API_URL="https://api.example.com" \
   -e APP_NAME="My Production App" \
   -e NODE_ENV="production" \
-  react-runtime-config-app
+  angular-runtime-config-app
 ```
 
 ### Debug Container
@@ -155,7 +155,7 @@ spec:
     spec:
       containers:
       - name: react-app
-        image: react-runtime-config-app:latest
+        image: angular-runtime-config-app:latest
         ports:
         - containerPort: 80
         env:

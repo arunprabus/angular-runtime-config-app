@@ -57,7 +57,7 @@ function App() {
             <div>
               <h3 className="font-medium text-gray-700 mb-2">Build the image:</h3>
               <code className="block bg-gray-100 p-3 rounded text-sm font-mono">
-                docker build -t react-runtime-config-app .
+                docker build -t angular-runtime-config-app .
               </code>
             </div>
             <div>
@@ -66,7 +66,7 @@ function App() {
                 docker run -p 8080:80 \<br />
                 &nbsp;&nbsp;-e API_URL="https://api.example.com" \<br />
                 &nbsp;&nbsp;-e APP_NAME="My Production App" \<br />
-                &nbsp;&nbsp;react-runtime-config-app
+                &nbsp;&nbsp;angular-runtime-config-app
               </code>
             </div>
             <div>
