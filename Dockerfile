@@ -20,7 +20,7 @@ FROM nginx:alpine
 COPY default.conf /etc/nginx/conf.d/default.conf
 
 # 2b) copy flat dist/ → html root
-COPY --from=builder /app/dist/ /usr/share/nginx/html/
+#COPY --from=builder /app/dist/ /usr/share/nginx/html/
 
 # 2c) copy entrypoint (no need to mkdir-assets—it's already there)
 COPY entrypoint.sh /entrypoint.sh
